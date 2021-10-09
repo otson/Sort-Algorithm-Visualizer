@@ -10,6 +10,7 @@ export class SortService {
   public array: number[] = [];
   public steps: [number[]] = [[]];
   private sorted = false;
+  private timeouts: number[] = [];
 
   constructor() {
     this.reset();
@@ -34,20 +35,23 @@ export class SortService {
   }
 
   public reset() {
+    while (this.timeouts.length > 0) {
+      clearTimeout(this.timeouts.pop());
+    }
+    this.sorted = false;
     this.array = [];
     for(let i = 0; i < this.columns; i++){
       this.array.push(Math.ceil(Math.random()*this.maxHeight));
     }
-    this.sorted = false;
   }
 
   public sort(){
-    this.bubbleSort();
     if(!this.sorted){
+      this.bubbleSort();
       for(let i = 0; i < this.steps.length; i++){
-        setTimeout(() => {
+        this.timeouts.push(setTimeout(() => {
           this.array = this.steps.shift()!;
-        }, 25*i);
+        }, 25*i));
       }
       this.sorted = true;
     }
