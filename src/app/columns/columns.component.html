@@ -1,0 +1,10 @@
+<div>
+  <table align="center">
+    <tr>
+      <td *ngFor="let h of sortService.array">
+        <app-column [height]="h">
+        </app-column>
+      </td>
+    </tr>
+  </table>
+</div>
