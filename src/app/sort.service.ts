@@ -13,6 +13,9 @@ export class SortService {
   private timeouts: number[] = [];
 
   constructor() {
+    const w = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+    const h = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+    this.columns = Math.floor(w * 0.8 / 25);
     this.reset();
   }
   public bubbleSort(){
