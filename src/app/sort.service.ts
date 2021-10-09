@@ -6,7 +6,7 @@ import { Injectable } from '@angular/core';
 export class SortService {
 
   private columns = 50;
-  private maxHeight= 50;
+  private maxHeight= 100;
   public array: number[] = [];
   public steps: [number[]] = [[]];
   private sorted = false;
