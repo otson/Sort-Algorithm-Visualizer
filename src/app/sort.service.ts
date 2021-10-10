@@ -51,6 +51,22 @@ export class SortService {
     }
   }
 
+  private selectionSort(){
+    let array = this.array.slice(0);
+    for(let i = 0;  i < array.length - 1; i++){
+      let jMin = i;
+      for(let j = i + 1; j < array.length; j++){
+        if(array[j] < array[jMin]){
+          jMin = j;
+        }
+      }
+      if(jMin != i){
+        this.swap(i,jMin, array);
+        this.steps.push(array.slice(0));
+      }
+    }
+  }
+
   private swap(i: number, j: number, array: number[]) {
     let temp = array[i];
     array[i] = array[j];
@@ -65,6 +81,14 @@ export class SortService {
     this.array = [];
     for(let i = 0; i < this.columns; i++){
       this.array.push(Math.ceil(Math.random()*this.maxHeight));
+    }
+  }
+
+  public sortUsingSelectionSort(){
+    if(!this.sorted){
+      this.selectionSort();
+      this.animate();
+      this.sorted = true;
     }
   }
 
