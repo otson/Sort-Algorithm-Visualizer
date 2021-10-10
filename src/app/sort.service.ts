@@ -118,7 +118,7 @@ export class SortService {
   public sortUsingQuicksort(){
     if(!this.sorted){
       this.quickSort(this.array.slice(0), 0, this.array.length-1);
-      this.animate();
+      this.animate(8);
       this.sorted = true;
     }
   }
@@ -126,7 +126,7 @@ export class SortService {
   public sortUsingSelectionSort(){
     if(!this.sorted){
       this.selectionSort();
-      this.animate();
+      this.animate(8);
       this.sorted = true;
     }
   }
@@ -147,11 +147,11 @@ export class SortService {
     }
   }
 
-  private animate(){
+  private animate(speedFactor: number = 1){
     for(let i = 0; i < this.steps.length; i++){
       this.timeouts.push(setTimeout(() => {
         this.array = this.steps.shift()!;
-      }, 25*i));
+      }, 25*i*speedFactor));
     }
   }
 }
