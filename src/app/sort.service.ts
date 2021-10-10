@@ -37,6 +37,26 @@ export class SortService {
     }
   }
 
+  private insertionSort(){
+    let array = this.array.slice(0);
+    let i = 1
+    while(i < array.length){
+      let j = i;
+      while(j > 0 && array[j-1] > array[j]){
+        this.swap(j,j-1, array);
+        this.steps.push(array.slice(0));
+        j--;
+      }
+      i++;
+    }
+  }
+
+  private swap(i: number, j: number, array: number[]) {
+    let temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+
   public reset() {
     while (this.timeouts.length > 0) {
       clearTimeout(this.timeouts.pop());
@@ -48,15 +68,27 @@ export class SortService {
     }
   }
 
-  public sort(){
+  public sortUsingInsertionSort(){
+    if(!this.sorted){
+      this.insertionSort();
+      this.animate();
+      this.sorted = true;
+    }
+  }
+
+  public sortUsingBubbleSort(){
     if(!this.sorted){
       this.bubbleSort();
-      for(let i = 0; i < this.steps.length; i++){
-        this.timeouts.push(setTimeout(() => {
-          this.array = this.steps.shift()!;
-        }, 25*i));
-      }
+      this.animate();
       this.sorted = true;
+    }
+  }
+
+  private animate(){
+    for(let i = 0; i < this.steps.length; i++){
+      this.timeouts.push(setTimeout(() => {
+        this.array = this.steps.shift()!;
+      }, 25*i));
     }
   }
 }
