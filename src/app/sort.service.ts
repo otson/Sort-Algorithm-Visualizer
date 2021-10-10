@@ -67,6 +67,37 @@ export class SortService {
     }
   }
 
+  private quickSort(A: number[], lo: number, hi: number){
+    let p = this.partition(A, lo, hi);
+    if(lo < p - 1){
+      this.quickSort(A, lo, p - 1);
+    }
+    if(p < hi){
+      this.quickSort(A, p, hi);
+    }
+  }
+
+  private partition(A: number[], lo: number, hi: number) {
+    let pivot   = A[Math.floor((hi + lo) / 2)];
+    let i = lo;
+    let j = hi;
+    while (i <= j) {
+      while (A[i] < pivot) {
+        i++;
+      }
+      while (A[j] > pivot) {
+        j--;
+      }
+      if (i <= j) {
+        this.swap(i, j, A);
+        this.steps.push(A.slice(0));
+        i++;
+        j--;
+      }
+    }
+    return i;
+  }
+
   private swap(i: number, j: number, array: number[]) {
     let temp = array[i];
     array[i] = array[j];
@@ -81,6 +112,14 @@ export class SortService {
     this.array = [];
     for(let i = 0; i < this.columns; i++){
       this.array.push(Math.ceil(Math.random()*this.maxHeight));
+    }
+  }
+
+  public sortUsingQuicksort(){
+    if(!this.sorted){
+      this.quickSort(this.array.slice(0), 0, this.array.length-1);
+      this.animate();
+      this.sorted = true;
     }
   }
 
