@@ -8,7 +8,7 @@ export class SortService {
   private columns = 50;
   private maxHeight= 100;
   public array: number[] = [];
-  public steps: [number[]] = [[]];
+  public steps: number[][] = [];
   private sorted = false;
   private timeouts: number[] = [];
 
