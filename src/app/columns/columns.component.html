@@ -1,8 +1,8 @@
 <div>
   <table align="center">
     <tr>
-      <td *ngFor="let h of sortService.array">
-        <app-column [height]="h">
+      <td *ngFor="let h of sortService.array; let i = index">
+        <app-column [height]="h" [sortClass]="sortService.classes[i]">
         </app-column>
       </td>
     </tr>

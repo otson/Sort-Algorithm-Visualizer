@@ -8,10 +8,14 @@ import {Component, Input, OnInit} from '@angular/core';
 export class ColumnComponent implements OnInit {
 
   @Input() height = 0;
+  @Input() sortClass: string = '';
 
-  constructor() { }
+  constructor() {
+    console.log(this.sortClass);
+  }
 
   ngOnInit(): void {
+
   }
 
 }

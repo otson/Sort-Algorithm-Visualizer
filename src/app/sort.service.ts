@@ -8,7 +8,9 @@ export class SortService {
   private columns = 50;
   private maxHeight= 100;
   public array: number[] = [];
-  public steps: number[][] = [];
+  public classes: string[] = [];
+  public stepNumbers: number[][] = [];
+  public stepClasses: string[][] = [];
   private sorted = false;
   private timeouts: number[] = [];
 
@@ -25,12 +27,21 @@ export class SortService {
     while(!sorted){
       sorted = true;
       for(let i = 0; i < array.length - 1 - round; i++){
+        this.stepNumbers.push(array.slice(0));
+        let classes = new Array(array.length);
+        classes[i] = 'checking';
+        classes[i+1] = 'checking';
+        this.stepClasses.push(classes);
         if(array[i] > array[i+1]){
           let temp = array[i];
           array[i] = array[i+1];
           array[i+1] = temp;
           sorted = false;
-          this.steps.push(array.slice(0));
+          this.stepNumbers.push(array.slice(0));
+          let classes = new Array(array.length);
+          classes[i] = 'swapping';
+          classes[i+1] = 'swapping';
+          this.stepClasses.push(classes);
         }
       }
       round++;
@@ -44,7 +55,7 @@ export class SortService {
       let j = i;
       while(j > 0 && array[j-1] > array[j]){
         this.swap(j,j-1, array);
-        this.steps.push(array.slice(0));
+        this.stepNumbers.push(array.slice(0));
         j--;
       }
       i++;
@@ -54,15 +65,25 @@ export class SortService {
   private selectionSort(){
     let array = this.array.slice(0);
     for(let i = 0;  i < array.length - 1; i++){
+
       let jMin = i;
       for(let j = i + 1; j < array.length; j++){
+        this.stepNumbers.push(array.slice(0));
+        let classes = new Array(array.length);
+        classes[j] = 'checking';
+        classes[jMin] = 'checking';
+        this.stepClasses.push(classes);
         if(array[j] < array[jMin]){
           jMin = j;
         }
       }
       if(jMin != i){
         this.swap(i,jMin, array);
-        this.steps.push(array.slice(0));
+        this.stepNumbers.push(array.slice(0));
+        let classes = new Array(array.length);
+        classes[i] = 'swapping';
+        classes[i+1] = 'swapping';
+        this.stepClasses.push(classes);
       }
     }
   }
@@ -90,7 +111,7 @@ export class SortService {
       }
       if (i <= j) {
         this.swap(i, j, A);
-        this.steps.push(A.slice(0));
+        this.stepNumbers.push(A.slice(0));
         i++;
         j--;
       }
@@ -126,7 +147,7 @@ export class SortService {
   public sortUsingSelectionSort(){
     if(!this.sorted){
       this.selectionSort();
-      this.animate(8);
+      this.animate(1);
       this.sorted = true;
     }
   }
@@ -142,16 +163,17 @@ export class SortService {
   public sortUsingBubbleSort(){
     if(!this.sorted){
       this.bubbleSort();
-      this.animate();
+      this.animate(5);
       this.sorted = true;
     }
   }
 
   private animate(speedFactor: number = 1){
-    for(let i = 0; i < this.steps.length; i++){
+    for(let i = 0; i < this.stepNumbers.length; i++){
       this.timeouts.push(setTimeout(() => {
-        this.array = this.steps.shift()!;
-      }, 25*i*speedFactor));
+        this.array = this.stepNumbers.shift()!;
+        this.classes = this.stepClasses.shift()!;
+      },  25*i*speedFactor));
     }
   }
 }

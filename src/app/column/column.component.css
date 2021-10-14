@@ -3,3 +3,11 @@ div {
   width: 25px;
   text-align: center;
 }
+
+.swapping {
+  background-color: red;
+}
+
+.checking {
+  background-color: green;
+}
