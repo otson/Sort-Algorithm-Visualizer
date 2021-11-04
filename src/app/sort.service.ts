@@ -5,18 +5,19 @@ import { Injectable } from '@angular/core';
 })
 export class SortService {
 
-  private columns = 50;
-  private maxHeight= 100;
   public numbers: number[] = [];
   public classes: string[] = [];
-  public stepNumbers: number[][] = [];
-  public stepClasses: string[][] = [];
-  private sorted = false;
-  private timeouts: number[] = [];
+  public isFastAnimation = false;
 
+  private stepNumbers: number[][] = [];
+  private stepClasses: string[][] = [];
+  private timeouts: number[] = [];
+  private columns = 50;
+  private maxHeight= 100;
+  private sorted = false;
   private SWAP = "swapping";
   private COMPARE = "comparing";
-  public isFastAnimation = false;
+
 
   constructor() {
     const w = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
