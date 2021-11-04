@@ -6,8 +6,20 @@ div {
 
 .swapping {
   background-color: red;
+  animation-name: swappingAnimation;
+  animation-duration: 0.2s;
+  animation-timing-function: ease-in-out;
+  animation-direction: alternate;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+  animation-play-state: running;
 }
 
 .comparing {
   background-color: green;
+}
+
+@keyframes swappingAnimation {
+  0%  {background: #ff4a4a;}
+  100%   {background: red;}
 }
