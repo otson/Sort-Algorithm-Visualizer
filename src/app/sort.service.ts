@@ -101,6 +101,7 @@ export class SortService {
   }
 
   private addCompareStep(i: number, j: number, A: number[]){
+    if(i == j) return;
     this.stepNumbers.push(A.slice(0));
     let classes = new Array(this.numbers.length);
     classes[i] = this.COMPARE;
@@ -109,6 +110,7 @@ export class SortService {
   }
 
   private addSwapStep(i: number, j: number, A: number[]){
+    if(i == j || A[i] == A[j]) return;
     this.stepNumbers.push(A.slice(0));
     let classes = new Array(this.numbers.length);
     classes[i] = this.SWAP;
@@ -181,10 +183,13 @@ export class SortService {
     if(this.stepNumbers.length > 0){
       let delay = wasSwap ? swapDelay : compareDelay;
       this.timeouts.push(setTimeout(() => {
-        this.numbers = this.stepNumbers.shift()!;
-        this.classes = this.stepClasses.shift()!;
-        this.animate(compareDelay, swapDelay, this.isSwap(this.classes));
+        if(this.stepNumbers.length > 0) {
+          this.numbers = this.stepNumbers.shift()!;
+          this.classes = this.stepClasses.shift()!;
+          this.animate(compareDelay, swapDelay, this.isSwap(this.classes));
+        } else {
+          this.classes = [];
+        }
       }, delay));
     }
-  }
 }
