@@ -28,9 +28,7 @@ export class SortService {
       for(let i = 0; i < array.length - 1 - round; i++){
         this.addCompareStep(i, i+1, array);
         if(array[i] > array[i+1]){
-          this.addSwapStep(i, i+1, array);
           this.swap(i,i+1, array);
-          this.addSwapStep(i, i+1, array);
           sorted = false;
 
         }
@@ -45,9 +43,7 @@ export class SortService {
     while(i < array.length){
       let j = i;
       while(j > 0 && array[j-1] > array[j]){
-        this.addSwapStep(j, j-i, array);
         this.swap(j,j-1, array);
-        this.addSwapStep(j, j-i, array);
         j--;
       }
       i++;
@@ -65,9 +61,7 @@ export class SortService {
         }
       }
       if(jMin != i){
-        this.addSwapStep(i, jMin, array);
         this.swap(i,jMin, array);
-        this.addSwapStep(i, jMin, array);
       }
     }
   }
@@ -96,9 +90,7 @@ export class SortService {
         j--;
       }
       if (i <= j) {
-        this.addSwapStep(i,j, A);
         this.swap(i, j, A);
-        this.addSwapStep(i,j, A);
         i++;
         j--;
       }
@@ -123,9 +115,12 @@ export class SortService {
   }
 
   private swap(i: number, j: number, array: number[]) {
+    this.addCompareStep(i,j, array);
+    this.addSwapStep(i,j, array);
     let temp = array[i];
     array[i] = array[j];
     array[j] = temp;
+    this.addSwapStep(i,j, array);
   }
 
   public reset() {
@@ -145,14 +140,14 @@ export class SortService {
   public sortUsingQuicksort(){
     this.reset();
     this.quickSort(this.numbers.slice(0), 0, this.numbers.length-1);
-    this.animate(8);
+    this.animate();
     this.sorted = true;
   }
 
   public sortUsingSelectionSort(){
     this.reset();
       this.selectionSort();
-      this.animate(1);
+      this.animate();
       this.sorted = true;
 
   }
@@ -168,7 +163,7 @@ export class SortService {
   public sortUsingBubbleSort(){
     this.reset();
       this.bubbleSort();
-      this.animate(5);
+      this.animate(50, 100);
       this.sorted = true;
 
   }
@@ -180,19 +175,14 @@ export class SortService {
     return false;
   }
 
-  private animate(speedFactor: number = 1){
-    let delay = 0;
-    for(let i = 0; i < this.stepNumbers.length; i++){
-      delay += 25 * speedFactor;
-      let newNumbers = this.stepNumbers.shift()!;
-      let newClasses = this.stepClasses.shift()!;
+  private animate(compareDelay: number = 100, swapDelay: number = 500, wasSwap: boolean = false){
+    if(this.stepNumbers.length > 0){
+      let delay = wasSwap ? swapDelay : compareDelay;
       this.timeouts.push(setTimeout(() => {
-        this.numbers = newNumbers;
-        this.classes = newClasses;
-      },  delay));
-      if(this.isSwap(newClasses)){
-        delay += 100 * speedFactor;
-      }
+        this.numbers = this.stepNumbers.shift()!;;
+        this.classes = this.stepClasses.shift()!;
+        this.animate(compareDelay, swapDelay, this.isSwap(this.classes));
+      }, delay));
     }
   }
 }
