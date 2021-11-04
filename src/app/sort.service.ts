@@ -14,6 +14,9 @@ export class SortService {
   private sorted = false;
   private timeouts: number[] = [];
 
+  private SWAP = "swapping";
+  private COMPARE = "comparing";
+
   constructor() {
     const w = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
     this.columns = Math.floor(w * 0.8 / 25);
@@ -30,7 +33,6 @@ export class SortService {
         if(array[i] > array[i+1]){
           this.swap(i,i+1, array);
           sorted = false;
-
         }
       }
       round++;
@@ -101,16 +103,16 @@ export class SortService {
   private addCompareStep(i: number, j: number, A: number[]){
     this.stepNumbers.push(A.slice(0));
     let classes = new Array(this.numbers.length);
-    classes[i] = 'checking';
-    classes[j] = 'checking';
+    classes[i] = this.COMPARE;
+    classes[j] = this.COMPARE;
     this.stepClasses.push(classes);
   }
 
   private addSwapStep(i: number, j: number, A: number[]){
     this.stepNumbers.push(A.slice(0));
     let classes = new Array(this.numbers.length);
-    classes[i] = 'swapping';
-    classes[j] = 'swapping';
+    classes[i] = this.SWAP;
+    classes[j] = this.SWAP;
     this.stepClasses.push(classes);
   }
 
@@ -170,7 +172,7 @@ export class SortService {
 
   private isSwap(classes: string[]){
     for(let className of classes){
-      if(className === 'swapping') return true;
+      if(className === this.SWAP) return true;
     }
     return false;
   }
@@ -179,7 +181,7 @@ export class SortService {
     if(this.stepNumbers.length > 0){
       let delay = wasSwap ? swapDelay : compareDelay;
       this.timeouts.push(setTimeout(() => {
-        this.numbers = this.stepNumbers.shift()!;;
+        this.numbers = this.stepNumbers.shift()!;
         this.classes = this.stepClasses.shift()!;
         this.animate(compareDelay, swapDelay, this.isSwap(this.classes));
       }, delay));
