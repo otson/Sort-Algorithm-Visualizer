@@ -3,4 +3,8 @@
 <button class="btn" (click)="sortService.sortUsingInsertionSort()">Insertion Sort</button>
 <button class="btn" (click)="sortService.sortUsingSelectionSort()">Selection Sort</button>
 <button class="btn" (click)="sortService.sortUsingQuicksort()">Quicksort</button>
+<button class="btn" (click)="sortService.sortUsingQuicksort()">Quicksort</button>
+<input #turbo type="checkbox" id="turbo" name="turbo"
+       [checked]="sortService.isFastAnimation" (change)="sortService.toggleAnimationSpeed(turbo.checked)">
+<label for="turbo">Turbo Speed!</label>
 <app-columns></app-columns>
