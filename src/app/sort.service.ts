@@ -7,7 +7,7 @@ export class SortService {
 
   private columns = 50;
   private maxHeight= 100;
-  public array: number[] = [];
+  public numbers: number[] = [];
   public classes: string[] = [];
   public stepNumbers: number[][] = [];
   public stepClasses: string[][] = [];
@@ -16,32 +16,23 @@ export class SortService {
 
   constructor() {
     const w = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-    const h = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
     this.columns = Math.floor(w * 0.8 / 25);
     this.reset();
   }
   public bubbleSort(){
     let sorted = false;
     let round = 0;
-    let array = this.array.slice(0);
+    let array = this.numbers.slice(0);
     while(!sorted){
       sorted = true;
       for(let i = 0; i < array.length - 1 - round; i++){
-        this.stepNumbers.push(array.slice(0));
-        let classes = new Array(array.length);
-        classes[i] = 'checking';
-        classes[i+1] = 'checking';
-        this.stepClasses.push(classes);
+        this.addCompareStep(i, i+1, array);
         if(array[i] > array[i+1]){
-          let temp = array[i];
-          array[i] = array[i+1];
-          array[i+1] = temp;
+          this.addSwapStep(i, i+1, array);
+          this.swap(i,i+1, array);
+          this.addSwapStep(i, i+1, array);
           sorted = false;
-          this.stepNumbers.push(array.slice(0));
-          let classes = new Array(array.length);
-          classes[i] = 'swapping';
-          classes[i+1] = 'swapping';
-          this.stepClasses.push(classes);
+
         }
       }
       round++;
@@ -49,13 +40,14 @@ export class SortService {
   }
 
   private insertionSort(){
-    let array = this.array.slice(0);
+    let array = this.numbers.slice(0);
     let i = 1
     while(i < array.length){
       let j = i;
       while(j > 0 && array[j-1] > array[j]){
+        this.addSwapStep(j, j-i, array);
         this.swap(j,j-1, array);
-        this.stepNumbers.push(array.slice(0));
+        this.addSwapStep(j, j-i, array);
         j--;
       }
       i++;
@@ -63,27 +55,19 @@ export class SortService {
   }
 
   private selectionSort(){
-    let array = this.array.slice(0);
+    let array = this.numbers.slice(0);
     for(let i = 0;  i < array.length - 1; i++){
-
       let jMin = i;
       for(let j = i + 1; j < array.length; j++){
-        this.stepNumbers.push(array.slice(0));
-        let classes = new Array(array.length);
-        classes[j] = 'checking';
-        classes[jMin] = 'checking';
-        this.stepClasses.push(classes);
+        this.addCompareStep(j, jMin, array);
         if(array[j] < array[jMin]){
           jMin = j;
         }
       }
       if(jMin != i){
+        this.addSwapStep(i, jMin, array);
         this.swap(i,jMin, array);
-        this.stepNumbers.push(array.slice(0));
-        let classes = new Array(array.length);
-        classes[i] = 'swapping';
-        classes[i+1] = 'swapping';
-        this.stepClasses.push(classes);
+        this.addSwapStep(i, jMin, array);
       }
     }
   }
@@ -104,19 +88,38 @@ export class SortService {
     let j = hi;
     while (i <= j) {
       while (A[i] < pivot) {
+        this.addCompareStep(i,j, A);
         i++;
       }
       while (A[j] > pivot) {
+        this.addCompareStep(i,j, A);
         j--;
       }
       if (i <= j) {
+        this.addSwapStep(i,j, A);
         this.swap(i, j, A);
-        this.stepNumbers.push(A.slice(0));
+        this.addSwapStep(i,j, A);
         i++;
         j--;
       }
     }
     return i;
+  }
+
+  private addCompareStep(i: number, j: number, A: number[]){
+    this.stepNumbers.push(A.slice(0));
+    let classes = new Array(this.numbers.length);
+    classes[i] = 'checking';
+    classes[j] = 'checking';
+    this.stepClasses.push(classes);
+  }
+
+  private addSwapStep(i: number, j: number, A: number[]){
+    this.stepNumbers.push(A.slice(0));
+    let classes = new Array(this.numbers.length);
+    classes[i] = 'swapping';
+    classes[j] = 'swapping';
+    this.stepClasses.push(classes);
   }
 
   private swap(i: number, j: number, array: number[]) {
@@ -130,50 +133,66 @@ export class SortService {
       clearTimeout(this.timeouts.pop());
     }
     this.sorted = false;
-    this.array = [];
+    this.numbers = [];
+    this.classes = [];
+    this.stepNumbers = [];
+    this.stepClasses = [];
     for(let i = 0; i < this.columns; i++){
-      this.array.push(Math.ceil(Math.random()*this.maxHeight));
+      this.numbers.push(Math.ceil(Math.random()*this.maxHeight));
     }
   }
 
   public sortUsingQuicksort(){
-    if(!this.sorted){
-      this.quickSort(this.array.slice(0), 0, this.array.length-1);
-      this.animate(8);
-      this.sorted = true;
-    }
+    this.reset();
+    this.quickSort(this.numbers.slice(0), 0, this.numbers.length-1);
+    this.animate(8);
+    this.sorted = true;
   }
 
   public sortUsingSelectionSort(){
-    if(!this.sorted){
+    this.reset();
       this.selectionSort();
       this.animate(1);
       this.sorted = true;
-    }
+
   }
 
   public sortUsingInsertionSort(){
-    if(!this.sorted){
+    this.reset();
       this.insertionSort();
       this.animate();
       this.sorted = true;
-    }
+
   }
 
   public sortUsingBubbleSort(){
-    if(!this.sorted){
+    this.reset();
       this.bubbleSort();
       this.animate(5);
       this.sorted = true;
+
+  }
+
+  private isSwap(classes: string[]){
+    for(let className of classes){
+      if(className === 'swapping') return true;
     }
+    return false;
   }
 
   private animate(speedFactor: number = 1){
+    let delay = 0;
     for(let i = 0; i < this.stepNumbers.length; i++){
+      delay += 25 * speedFactor;
+      let newNumbers = this.stepNumbers.shift()!;
+      let newClasses = this.stepClasses.shift()!;
       this.timeouts.push(setTimeout(() => {
-        this.array = this.stepNumbers.shift()!;
-        this.classes = this.stepClasses.shift()!;
-      },  25*i*speedFactor));
+        this.numbers = newNumbers;
+        this.classes = newClasses;
+      },  delay));
+      if(this.isSwap(newClasses)){
+        delay += 100 * speedFactor;
+      }
     }
   }
 }
