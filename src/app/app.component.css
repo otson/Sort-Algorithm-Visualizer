@@ -10,6 +10,14 @@
   margin-bottom: 50px;
 }
 
+.reset {
+  background-color: #f86868;
+}
+
 .btn:hover {
   background-color: #7a8ee5;
+}
+
+.reset:hover {
+  background-color: #f13939;
 }
