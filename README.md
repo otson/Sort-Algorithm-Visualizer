@@ -10,7 +10,7 @@ These include:
 
 ## Live Demo
 
-https://otson.github.io/Sort-Algorithm-Visualizer/
+https://otson.github.io/Sorting-Algorithm-Visualizer/
 
 ## Development server
 
