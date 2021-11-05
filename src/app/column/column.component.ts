@@ -11,11 +11,9 @@ export class ColumnComponent implements OnInit {
   @Input() sortClass: string = '';
 
   constructor() {
-    console.log(this.sortClass);
   }
 
   ngOnInit(): void {
 
   }
-
 }

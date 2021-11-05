@@ -20,6 +20,10 @@ div {
 }
 
 @keyframes swappingAnimation {
-  0%  {background: #ff4a4a;}
-  100%   {background: red;}
+  0% {
+    background: #ff4a4a;
+  }
+  100% {
+    background: red;
+  }
 }

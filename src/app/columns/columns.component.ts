@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {SortService} from "../sort.service";
 
 @Component({
@@ -8,7 +8,8 @@ import {SortService} from "../sort.service";
 })
 export class ColumnsComponent implements OnInit {
 
-  constructor(public sortService: SortService) { }
+  constructor(public sortService: SortService) {
+  }
 
   ngOnInit(): void {
   }
